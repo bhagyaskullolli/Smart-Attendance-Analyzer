@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Smart Attendance Analyser</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<!-- ============ LOGIN SCREEN ============ -->
+<section id="loginView" class="login-wrap">
+  <form id="loginForm" class="card login-card" autocomplete="off">
+    <h1>Smart Attendance Analyser</h1>
+    <p class="muted">Government First Grade College for Women, Jamakhandi</p>
+    <label for="username">Username</label>
+    <input id="username" type="text" required>
+    <label for="password">Password</label>
+    <input id="password" type="password" required>
+    <button type="submit" class="btn primary">Login</button>
+    <p id="loginMsg" class="msg error" role="alert"></p>
+  </form>
+</section>
+
+<!-- ============ MAIN APPLICATION ============ -->
+<div id="appView" hidden>
+  <header class="topbar">
+    <div class="brand">Smart Attendance Analyser</div>
+    <nav id="tabs">
+      <button data-tab="dashboard" class="active">Dashboard</button>
+      <button data-tab="mark">Mark Attendance</button>
+      <button data-tab="students">Students</button>
+      <button data-tab="reports">Reports</button>
+    </nav>
+    <button id="logoutBtn" class="btn small">Logout</button>
+  </header>
+
+  <main>
+    <!-- Dashboard -->
+    <section id="tab-dashboard" class="tab">
+      <div class="stats">
+        <div class="stat"><span id="stTotal">0</span><small>Total Students</small></div>
+        <div class="stat"><span id="stAvg">0%</span><small>Average Attendance</small></div>
+        <div class="stat good"><span id="stGood">0</span><small>Good (80% and above)</small></div>
+        <div class="stat warn"><span id="stRisk">0</span><small>At Risk (75% to 79.99%)</small></div>
+        <div class="stat bad"><span id="stShort">0</span><small>Shortage (below 75%)</small></div>
+      </div>
+      <div class="grid2">
+        <div class="card">
+          <h2>Student-wise Overall Attendance (%)</h2>
+          <canvas id="barChart" width="640" height="320"></canvas>
+        </div>
+        <div class="card">
+          <h2>Daily Attendance Trend</h2>
+          <select id="trendSubject"></select>
+          <canvas id="lineChart" width="640" height="300"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- Mark attendance -->
+    <section id="tab-mark" class="tab" hidden>
+      <div class="card">
+        <h2>Mark Attendance</h2>
+        <div class="row">
+          <div><label for="markSubject">Subject</label><select id="markSubject"></select></div>
+          <div><label for="markDate">Date</label><input type="date" id="markDate"></div>
+          <button id="loadBtn" class="btn">Load Students</button>
+          <button id="allPresent" class="btn">Mark All Present</button>
+          <button id="saveAtt" class="btn primary">Save Attendance</button>
+        </div>
+        <p id="markMsg" class="msg"></p>
+        <table id="markTable">
+          <thead><tr><th>Roll No</th><th>Name</th><th>Present</th><th>Absent</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Students and subjects -->
+    <section id="tab-students" class="tab" hidden>
+      <div class="grid2">
+        <div class="card">
+          <h2>Add Student</h2>
+          <form id="studentForm">
+            <label for="sRoll">Roll Number</label><input id="sRoll" required>
+            <label for="sName">Student Name</label><input id="sName" required>
+            <button class="btn primary" type="submit">Add Student</button>
+          </form>
+          <p id="studentMsg" class="msg"></p>
+          <h2>Add Subject</h2>
+          <form id="subjectForm">
+            <label for="subCode">Subject Code</label><input id="subCode" required>
+            <label for="subName">Subject Name</label><input id="subName" required>
+            <button class="btn primary" type="submit">Add Subject</button>
+          </form>
+          <p id="subjectMsg" class="msg"></p>
+        </div>
+        <div class="card">
+          <h2>Student List</h2>
+          <table id="studentTable">
+            <thead><tr><th>Roll No</th><th>Name</th><th></th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Reports -->
+    <section id="tab-reports" class="tab" hidden>
+      <div class="card">
+        <div class="row between">
+          <h2>Attendance Report</h2>
+          <div>
+            <select id="filterStatus">
+              <option value="">All students</option>
+              <option value="Shortage">Shortage only</option>
+              <option value="At Risk">At Risk only</option>
+              <option value="Good">Good only</option>
+            </select>
+            <a class="btn" href="/api/export.csv">Download CSV</a>
+          </div>
+        </div>
+        <div class="scroll">
+          <table id="reportTable"><thead></thead><tbody></tbody></table>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>
